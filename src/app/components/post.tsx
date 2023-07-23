@@ -106,6 +106,15 @@ const Post = () => {
             src={`/img/https___hikkoshizamurai_jp_useful_baggage_refrigerator_.png`}
             alt=""
           />
+          <a
+            className="block text-right mt-1"
+            href="/img/https___www_roomselect_jp_info_detail_0055_.png"
+            download
+          >
+            <Button size={"sm"} variant={"ghost"}>
+              ダウンロード
+            </Button>
+          </a>
         </div>
         <div key="" className="rounded-lg shadow-md">
           <TooltipProvider>
@@ -134,6 +143,15 @@ const Post = () => {
             src={`/img/https___www_roomselect_jp_info_detail_0055_.png`}
             alt=""
           />
+          <a
+            className="block text-right mt-1"
+            href="/img/https___www_roomselect_jp_info_detail_0055_.png"
+            download
+          >
+            <Button size={"sm"} variant={"ghost"}>
+              ダウンロード
+            </Button>
+          </a>
         </div>
       </div>
     </>
