@@ -2,9 +2,15 @@
 
 import React from "react";
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/Input";
+import { Separator } from "@/components/ui/Separator";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/Tooltip";
 
 const Post = () => {
   const [query, setQuery] = useState("");
@@ -73,19 +79,51 @@ const Post = () => {
           </div>
         ))} */}
         <div key="" className="break-words rounded-lg shadow-md">
-          <a href="" target="_blank" rel="noopener noreferrer">
-            https://wwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfe
-          </a>
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger className="overflow-hidden w-full">
+                <a
+                  className="overflow-ellipsis overflow-hidden whitespace-nowrap block w-full mb-1"
+                  href=""
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  https://wwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfe
+                </a>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>
+                  https://wwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfe
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
           <img
             className="w-full object-cover object-center"
             src={`/img/https___hikkoshizamurai_jp_useful_baggage_refrigerator_.png`}
             alt=""
           />
         </div>
-        <div key="" className="break-words rounded-lg shadow-md">
-          <a href="" target="_blank" rel="noopener noreferrer">
-            https://wwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfe
-          </a>
+        <div key="" className="rounded-lg shadow-md">
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger className="overflow-hidden w-full">
+                <a
+                  className="overflow-ellipsis overflow-hidden whitespace-nowrap block w-full mb-1"
+                  href=""
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  https://wwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfe
+                </a>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>
+                  https://wwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfe
+                </p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
           <img
             className="w-full object-cover object-center"
             src={`/img/https___www_roomselect_jp_info_detail_0055_.png`}
