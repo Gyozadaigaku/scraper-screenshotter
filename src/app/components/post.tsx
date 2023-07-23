@@ -11,6 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/Tooltip";
+import Image from "next/image";
 
 const Post = () => {
   const [query, setQuery] = useState("");
@@ -98,7 +99,9 @@ const Post = () => {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <img
+          <Image
+            width={200}
+            height={200}
             className="w-full object-cover object-center"
             src={`/img/https___hikkoshizamurai_jp_useful_baggage_refrigerator_.png`}
             alt=""
@@ -124,7 +127,9 @@ const Post = () => {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-          <img
+          <Image
+            width={200}
+            height={200}
             className="w-full object-cover object-center"
             src={`/img/https___www_roomselect_jp_info_detail_0055_.png`}
             alt=""
