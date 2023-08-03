@@ -66,268 +66,44 @@ const Post = () => {
       {/* {files.length > 0 && <Separator className="my-8" />} */}
       <Separator className="my-8" />
       {/* Display the images */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {/* {files.map((file, index) => (
-                  <div key={index} className="rounded-lg shadow-md">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger className="overflow-hidden w-full">
-                <a
-                  className="overflow-ellipsis overflow-hidden whitespace-nowrap block w-full mb-1"
-                  href={file.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-               {file.url}
-                </a>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>
-               {file.url}
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <Image
-            width={200}
-            height={200}
-            className="w-full object-cover object-center"
-            src={`/img/${file.fileName}`}
+      <div className="grid gap-[30px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] grid-flow-row-dense">
+        {files.map((file, index) => (
+          <div
+            key={index}
+            className="relative flex flex-col justify-start box-border col-start-auto row-start-auto bg-center cursor-pointer"
+          >
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger className="overflow-hidden w-full">
+                  <a
+                    className="overflow-ellipsis overflow-hidden whitespace-nowrap block w-full mb-1"
+                    href={file.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {file.url}
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{file.url}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+            <Image
+              width={200}
+              height={200}
+              className="w-full object-cover object-center"
+              src={`data:image/png;base64,${file.fileName}`}
+              // src={`/img/${file.fileName}`}
               alt={`Screenshot ${index + 1}`}
-          />
-          <a
-            className="block text-right mt-1"
-            href={file.url}
-            download
-          >
-            <Button size={"sm"} variant={"ghost"}>
-              ダウンロード
-            </Button>
-          </a>
-        </div>
-        ))} */}
-        <div key="" className="rounded-lg shadow-md">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger className="overflow-hidden w-full">
-                <a
-                  className="overflow-ellipsis overflow-hidden whitespace-nowrap block w-full mb-1"
-                  href=""
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  https://wwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfe
-                </a>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>
-                  https://wwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfe
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <Image
-            width={200}
-            height={200}
-            className="w-full object-cover object-center"
-            src={`/img/https___hikkoshizamurai_jp_useful_baggage_refrigerator_.png`}
-            alt=""
-          />
-          <a
-            className="block text-right mt-1"
-            href="/img/https___www_roomselect_jp_info_detail_0055_.png"
-            download
-          >
-            <Button size={"sm"} variant={"ghost"}>
-              ダウンロード
-            </Button>
-          </a>
-        </div>
-        <div key="" className="rounded-lg shadow-md">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger className="overflow-hidden w-full">
-                <a
-                  className="overflow-ellipsis overflow-hidden whitespace-nowrap block w-full mb-1"
-                  href=""
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  https://wwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfe
-                </a>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>
-                  https://wwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfe
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <Image
-            width={200}
-            height={200}
-            className="w-full object-cover object-center"
-            src={`/img/https___www_roomselect_jp_info_detail_0055_.png`}
-            alt=""
-          />
-          <a
-            className="block text-right mt-1"
-            href="/img/https___www_roomselect_jp_info_detail_0055_.png"
-            download
-          >
-            <Button size={"sm"} variant={"ghost"}>
-              ダウンロード
-            </Button>
-          </a>
-        </div>
-        <div key="" className="rounded-lg shadow-md">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger className="overflow-hidden w-full">
-                <a
-                  className="overflow-ellipsis overflow-hidden whitespace-nowrap block w-full mb-1"
-                  href=""
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  https://wwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfe
-                </a>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>
-                  https://wwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfe
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <Image
-            width={200}
-            height={200}
-            className="w-full object-cover object-center"
-            src={`/img/https___hikkoshizamurai_jp_useful_baggage_refrigerator_.png`}
-            alt=""
-          />
-          <a
-            className="block text-right mt-1"
-            href="/img/https___www_roomselect_jp_info_detail_0055_.png"
-            download
-          >
-            <Button size={"sm"} variant={"ghost"}>
-              ダウンロード
-            </Button>
-          </a>
-        </div>
-        <div key="" className="rounded-lg shadow-md">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger className="overflow-hidden w-full">
-                <a
-                  className="overflow-ellipsis overflow-hidden whitespace-nowrap block w-full mb-1"
-                  href=""
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  https://wwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfe
-                </a>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>
-                  https://wwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfe
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <Image
-            width={200}
-            height={200}
-            className="w-full object-cover object-center"
-            src={`/img/https___www_roomselect_jp_info_detail_0055_.png`}
-            alt=""
-          />
-          <a
-            className="block text-right mt-1"
-            href="/img/https___www_roomselect_jp_info_detail_0055_.png"
-            download
-          >
-            <Button size={"sm"} variant={"ghost"}>
-              ダウンロード
-            </Button>
-          </a>
-        </div>
-        <div key="" className="rounded-lg shadow-md">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger className="overflow-hidden w-full">
-                <a
-                  className="overflow-ellipsis overflow-hidden whitespace-nowrap block w-full mb-1"
-                  href=""
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  https://wwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfe
-                </a>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>
-                  https://wwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfe
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <Image
-            width={200}
-            height={200}
-            className="w-full object-cover object-center"
-            src={`/img/https___hikkoshizamurai_jp_useful_baggage_refrigerator_.png`}
-            alt=""
-          />
-          <a
-            className="block text-right mt-1"
-            href="/img/https___www_roomselect_jp_info_detail_0055_.png"
-            download
-          >
-            <Button size={"sm"} variant={"ghost"}>
-              ダウンロード
-            </Button>
-          </a>
-        </div>
-        <div key="" className="rounded-lg shadow-md">
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger className="overflow-hidden w-full">
-                <a
-                  className="overflow-ellipsis overflow-hidden whitespace-nowrap block w-full mb-1"
-                  href=""
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  https://wwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfe
-                </a>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>
-                  https://wwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfewwwsadfasfe
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-          <Image
-            width={200}
-            height={200}
-            className="w-full object-cover object-center"
-            src={`/img/https___www_roomselect_jp_info_detail_0055_.png`}
-            alt=""
-          />
-          <a
-            className="block text-right mt-1"
-            href="/img/https___www_roomselect_jp_info_detail_0055_.png"
-            download
-          >
-            <Button size={"sm"} variant={"ghost"}>
-              ダウンロード
-            </Button>
-          </a>
-        </div>
+            />
+            <a className="block text-right mt-1" href={file.url} download>
+              <Button size={"sm"} variant={"ghost"}>
+                ダウンロード
+              </Button>
+            </a>
+          </div>
+        ))}
       </div>
     </>
   );
