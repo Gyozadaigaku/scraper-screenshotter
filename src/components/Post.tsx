@@ -46,7 +46,12 @@ const Post = () => {
     },
   })
 
-  const onSubmit = (data: FormData) => createPost(data.searchQuery)
+  const onSubmit = (data: FormData) => {
+    console.log('aaaa')
+    console.log(data)
+
+    createPost(data)
+  }
 
   return (
     <>
