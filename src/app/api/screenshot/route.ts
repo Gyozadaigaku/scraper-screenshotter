@@ -1,20 +1,10 @@
 import puppeteer from "puppeteer";
-// import devices from "puppeteer/DeviceDescriptors";
 const devices = require("puppeteer").devices;
-import fs from "fs";
-import path from "path";
 import { NextResponse } from "next/server";
 
-const imgDirectory = "./public/img"; // store images in Next.js public directory
-
 export async function GET(req: Request) {
-  clearDirectory(imgDirectory);
-  console.log("aaaaaa");
   const url = new URL(req.url);
-  console.log(url);
   const href = url.searchParams.get("searchQuery");
-  console.log("bbbbb");
-  console.log(href);
 
   if (!href) {
     return new Response("Invalid href", { status: 400 });
@@ -35,39 +25,23 @@ export async function GET(req: Request) {
     { message: "success", files: urlsInfo },
     { status: 200 }
   );
-  // res.status(200).json({ success: true });
-}
-
-function clearDirectory(directory) {
-  fs.readdir(directory, (err, files) => {
-    if (err) throw err;
-
-    for (let file of files) {
-      fs.unlink(path.join(directory, file), (err) => {
-        if (err) throw err;
-      });
-    }
-  });
 }
 
 async function takeScreenshot(url) {
-  // const devices = puppeteer.devices;
   const iPhone = devices["iPhone X"];
-  // const iPhone = puppeteer.devices["iPhone X"];
   const browser = await puppeteer.launch({ headless: "new" });
   const page = await browser.newPage();
   await page.emulate(iPhone);
-  // await page.goto(url, { timeout: 120000 });
-  // await page.goto(url, { waitUntil: "domcontentloaded" });
   await page.goto(url, { waitUntil: "load", timeout: 0 });
 
-  const safeFileName = url.replace(/[^a-z0-9]/gi, "_").toLowerCase();
-  const screenshotPath = path.join(imgDirectory, `${safeFileName}.png`);
-
-  await page.screenshot({ path: screenshotPath, fullPage: true });
+  // Take a screenshot and get it as a Buffer
+  const screenshotBuffer = await page.screenshot({ fullPage: true });
   await browser.close();
 
-  return `${safeFileName}.png`; // Return the filename
+  // Convert the Buffer to a base64 string
+  const screenshotBase64 = screenshotBuffer.toString("base64");
+
+  return screenshotBase64;
 }
 
 async function scrapeGoogle(searchQuery) {
@@ -82,13 +56,13 @@ async function scrapeGoogle(searchQuery) {
 
   await page.goto(`https://www.google.com/search?q=${encodeURI(searchQuery)}`);
 
-  let searchResults = await page.$$eval(".yuRUbf > a", (links) =>
+  let searchResults = await page.$$eval(".v5yQqb > a", (links) =>
     links.map((link) => {
       const url = link.href;
-      const hashIndex = url.indexOf("#");
-      if (hashIndex > -1) {
-        return url.slice(0, hashIndex);
-      }
+      // const hashIndex = url.indexOf("#");
+      // if (hashIndex > -1) {
+      //   return url.slice(0, hashIndex);
+      // }
       return url;
     })
   );
