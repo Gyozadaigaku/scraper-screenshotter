@@ -2,6 +2,7 @@ import './globals.css'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import Providers from '@/components/Providers'
+import { Toaster } from '@/components/ui/Toaster'
 import { fontSans } from '@/lib/fonts'
 import { cn } from '@/lib/utils'
 
@@ -17,6 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang='ja' suppressHydrationWarning>
       <body className={cn('min-h-screen bg-background font-sans antialiased', fontSans.variable)}>
         <Providers>{children}</Providers>
+        <Toaster />
       </body>
     </html>
   )

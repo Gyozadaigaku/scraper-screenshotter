@@ -11,11 +11,13 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Separator } from '@/components/ui/Separator'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/Tooltip'
+import { useToast } from '@/hooks/use-toast'
 import { PostCreationRequest, PostValidator } from '@/lib/validators/post'
 
 type FormData = z.infer<typeof PostValidator>
 
 const Post = () => {
+  const { toast } = useToast()
   const {
     register,
     handleSubmit,
@@ -38,8 +40,12 @@ const Post = () => {
       const { data } = await axios.get(`/api/screenshot?searchQuery=${searchQuery}`)
       return data
     },
-    onError: (error) => {
-      throw new Error(error.response.data.error)
+    onError: () => {
+      return toast({
+        title: 'API の呼び出しに失敗しました。',
+        description: '時間をおいてから再度お試しください。',
+        variant: 'destructive',
+      })
     },
     onSuccess: (data) => {
       queryClient.setQueryData(['screenshot', data.searchQuery], data.files)
@@ -67,7 +73,6 @@ const Post = () => {
           {isLoading ? 'Loading...' : 'Search'}
         </Button>
       </form>
-      {isError && <p>Something went wrong...</p>}
       <Separator className='my-8' />
       {/* Display the images */}
       <div className='grid gap-[30px] grid-cols-[repeat(auto-fit,minmax(300px,1fr))] grid-flow-row-dense'>
