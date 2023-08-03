@@ -28,20 +28,26 @@ export async function GET(req: Request) {
 }
 
 async function takeScreenshot(url) {
-  const iPhone = devices["iPhone X"];
-  const browser = await puppeteer.launch({ headless: "new" });
-  const page = await browser.newPage();
-  await page.emulate(iPhone);
-  await page.goto(url, { waitUntil: "load", timeout: 0 });
+  try {
+    const iPhone = devices["iPhone X"];
+    const browser = await puppeteer.launch({ headless: "new" });
+    const page = await browser.newPage();
+    page.setDefaultNavigationTimeout(60000);
+    await page.emulate(iPhone);
+    await page.goto(url, { waitUntil: "load", timeout: 60000 });
 
-  // Take a screenshot and get it as a Buffer
-  const screenshotBuffer = await page.screenshot({ fullPage: true });
-  await browser.close();
+    // Take a screenshot and get it as a Buffer
+    const screenshotBuffer = await page.screenshot({ fullPage: true });
+    await browser.close();
 
-  // Convert the Buffer to a base64 string
-  const screenshotBase64 = screenshotBuffer.toString("base64");
+    // Convert the Buffer to a base64 string
+    const screenshotBase64 = screenshotBuffer.toString("base64");
 
-  return screenshotBase64;
+    return screenshotBase64;
+  } catch (error) {
+    console.error("Error taking screenshot:", error);
+    throw error;
+  }
 }
 
 async function scrapeGoogle(searchQuery) {
