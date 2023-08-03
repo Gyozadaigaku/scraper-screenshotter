@@ -29,9 +29,9 @@ async function takeScreenshot(url) {
     const iPhone = devices['iPhone X']
     const browser = await puppeteer.launch({ headless: 'new' })
     const page = await browser.newPage()
-    page.setDefaultNavigationTimeout(60000)
+    page.setDefaultNavigationTimeout(120000)
     await page.emulate(iPhone)
-    await page.goto(url, { waitUntil: 'load', timeout: 60000 })
+    await page.goto(url, { waitUntil: 'load', timeout: 120000 })
 
     // Take a screenshot and get it as a Buffer
     const screenshotBuffer = await page.screenshot({ fullPage: true })
