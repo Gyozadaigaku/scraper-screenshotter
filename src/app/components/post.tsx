@@ -94,10 +94,13 @@ const Post = () => {
               height={200}
               className="w-full object-cover object-center"
               src={`data:image/png;base64,${file.fileName}`}
-              // src={`/img/${file.fileName}`}
               alt={`Screenshot ${index + 1}`}
             />
-            <a className="block text-right mt-1" href={file.url} download>
+            <a
+              className="block text-right mt-1"
+              href={`data:image/png;base64,${file.fileName}`}
+              download
+            >
               <Button size={"sm"} variant={"ghost"}>
                 ダウンロード
               </Button>
