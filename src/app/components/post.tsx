@@ -17,7 +17,6 @@ const Post = () => {
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
-  const [images, setImages] = useState([]); // new state variable to hold images
   const [files, setFiles] = useState([]);
 
   const handleSubmit = async (event) => {
@@ -34,7 +33,6 @@ const Post = () => {
       }
 
       // Set the images state variable to the list of filenames from the API
-      // setImages(data.fileNames);
       setFiles(data.files);
 
       // Here you might want to do something with the response...
@@ -76,7 +74,7 @@ const Post = () => {
               <Tooltip>
                 <TooltipTrigger className="overflow-hidden w-full">
                   <a
-                    className="overflow-ellipsis overflow-hidden whitespace-nowrap block w-full mb-1"
+                    className="overflow-ellipsis overflow-hidden whitespace-nowrap block w-full mb-1 text-muted-foreground hover:text-white"
                     href={file.url}
                     target="_blank"
                     rel="noopener noreferrer"
