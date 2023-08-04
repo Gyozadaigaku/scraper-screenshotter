@@ -1,9 +1,46 @@
 import { NextResponse } from 'next/server'
-import puppeteer, { Browser } from 'puppeteer'
+import puppeteer, { Browser, Page } from 'puppeteer'
 const devices = require('puppeteer').devices
 
 // Share one browser instance
-let browserInstance: Browser | null = null
+const minimal_args = [
+  '--autoplay-policy=user-gesture-required',
+  '--disable-background-networking',
+  '--disable-background-timer-throttling',
+  '--disable-backgrounding-occluded-windows',
+  '--disable-breakpad',
+  '--disable-client-side-phishing-detection',
+  '--disable-component-update',
+  '--disable-default-apps',
+  '--disable-dev-shm-usage',
+  '--disable-domain-reliability',
+  '--disable-extensions',
+  '--disable-features=AudioServiceOutOfProcess',
+  '--disable-hang-monitor',
+  '--disable-ipc-flooding-protection',
+  '--disable-notifications',
+  '--disable-offer-store-unmasked-wallet-cards',
+  '--disable-popup-blocking',
+  '--disable-print-preview',
+  '--disable-prompt-on-repost',
+  '--disable-renderer-backgrounding',
+  '--disable-setuid-sandbox',
+  '--disable-speech-api',
+  '--disable-sync',
+  '--hide-scrollbars',
+  '--ignore-gpu-blacklist',
+  '--metrics-recording-only',
+  '--mute-audio',
+  '--no-default-browser-check',
+  '--no-first-run',
+  '--no-pings',
+  '--no-sandbox',
+  '--no-zygote',
+  '--password-store=basic',
+  '--use-gl=swiftshader',
+  '--use-mock-keychain',
+]
+const browserPromise: Promise<Browser> = puppeteer.launch({ headless: true, args: minimal_args })
 
 export async function GET(req: Request) {
   const url = new URL(req.url)
@@ -14,19 +51,18 @@ export async function GET(req: Request) {
   }
 
   try {
-    const urls = await scrapeGoogle(href)
+    const browserInstance = await browserPromise
+
+    const urls = await scrapeGoogle(href, browserInstance)
 
     if (urls.length === 0) {
       return new Response('Not found', { status: 404 })
     }
 
-    let fileNames = []
-    let urlsInfo = []
-    for (let url of urls) {
-      const fileName = await takeScreenshot(url)
-      fileNames.push(fileName)
-      urlsInfo.push({ fileName, url })
-    }
+    const screenshotPromises = urls.map((url) => takeScreenshot(url, browserInstance))
+    const fileNames = await Promise.all(screenshotPromises)
+
+    const urlsInfo = urls.map((url, index) => ({ fileName: fileNames[index], url }))
 
     return NextResponse.json({ message: 'success', files: urlsInfo }, { status: 200 })
   } catch (error) {
@@ -35,19 +71,15 @@ export async function GET(req: Request) {
   }
 }
 
-async function takeScreenshot(url: string) {
+async function takeScreenshot(url: string, browserInstance: Browser): Promise<string> {
+  console.log('takeScreenshot')
   try {
-    if (!browserInstance) {
-      browserInstance = await puppeteer.launch({ headless: 'new' })
-    }
-
     const iPhone = devices['iPhone X']
-    const page = await browserInstance.newPage()
-    page.setDefaultNavigationTimeout(120000)
-    await page.emulate(iPhone)
-    await page.goto(url, { waitUntil: 'load', timeout: 120000 })
+    const page = await createPage(browserInstance, iPhone)
 
-    const screenshotBuffer = await page.screenshot({ fullPage: true })
+    await page.goto(url, { waitUntil: 'networkidle0', timeout: 120000 })
+
+    const screenshotBuffer = await page.screenshot({ fullPage: false, type: 'webp' })
     await page.close()
 
     const screenshotBase64 = screenshotBuffer.toString('base64')
@@ -58,25 +90,33 @@ async function takeScreenshot(url: string) {
   }
 }
 
-async function scrapeGoogle(searchQuery: string) {
+async function createPage(
+  browserInstance: Browser,
+  device: puppeteer.DeviceDescriptor,
+): Promise<Page> {
   try {
-    if (!browserInstance) {
-      browserInstance = await puppeteer.launch({ headless: 'new' })
-    }
-
     const page = await browserInstance.newPage()
-    const userAgent =
-      'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1'
-    const viewport = { width: 375, height: 812 }
-    await page.setUserAgent(userAgent)
-    await page.setViewport(viewport)
+    page.setDefaultNavigationTimeout(120000)
+    await page.emulate(device)
+    return page
+  } catch (error) {
+    console.error('Error creating page:', (error as Error).message)
+    throw error
+  }
+}
+
+async function scrapeGoogle(searchQuery: string, browserInstance: Browser): Promise<string[]> {
+  console.log('scrapeGoogle')
+  try {
+    const page = await createPage(browserInstance, devices['iPhone X'])
 
     await page.goto(`https://www.google.com/search?q=${encodeURI(searchQuery)}`)
 
-    let searchResults = await page.$$eval('.v5yQqb > a', (links) => links.map((link) => link.href))
+    const searchResults = await page.$$eval('.v5yQqb > a', (links) =>
+      links.map((link) => link.href),
+    )
 
-    searchResults = searchResults.slice(0, 2)
-    return searchResults
+    return searchResults.slice(0, 2)
   } catch (error) {
     console.error('Error scraping Google:', (error as Error).message)
     throw error
