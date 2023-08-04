@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
 import puppeteer, { Browser, Page } from 'puppeteer'
 const devices = require('puppeteer').devices
+import pMap from 'p-map'
 
 // Share one browser instance
 const minimal_args = [
@@ -40,6 +41,7 @@ const minimal_args = [
   '--use-gl=swiftshader',
   '--use-mock-keychain',
 ]
+
 const browserPromise: Promise<Browser> = puppeteer.launch({ headless: true, args: minimal_args })
 
 export async function GET(req: Request) {
@@ -59,8 +61,10 @@ export async function GET(req: Request) {
       return new Response('Not found', { status: 404 })
     }
 
-    const screenshotPromises = urls.map((url) => takeScreenshot(url, browserInstance))
-    const fileNames = await Promise.all(screenshotPromises)
+    // Use pMap to control the concurrency of screenshot generation
+    const fileNames = await pMap(urls, (url) => takeScreenshot(url, browserInstance), {
+      concurrency: 10,
+    }) // Adjust concurrency as necessary
 
     const urlsInfo = urls.map((url, index) => ({ fileName: fileNames[index], url }))
 
@@ -72,21 +76,21 @@ export async function GET(req: Request) {
 }
 
 async function takeScreenshot(url: string, browserInstance: Browser): Promise<string> {
-  console.log('takeScreenshot')
   try {
     const iPhone = devices['iPhone X']
     const page = await createPage(browserInstance, iPhone)
 
-    await page.goto(url, { waitUntil: 'networkidle0', timeout: 120000 })
+    await page.goto(url, { waitUntil: 'networkidle0', timeout: 0 })
 
     const screenshotBuffer = await page.screenshot({ fullPage: false, type: 'webp' })
     await page.close()
 
     const screenshotBase64 = screenshotBuffer.toString('base64')
+    console.log('takeScreenshot finished')
     return screenshotBase64
   } catch (error) {
-    console.error('Error taking screenshot:', (error as Error).message)
-    throw error
+    console.error(`Error taking screenshot of ${url}:`, (error as Error).message)
+    return '' // return an empty string or some placeholder
   }
 }
 
@@ -96,7 +100,7 @@ async function createPage(
 ): Promise<Page> {
   try {
     const page = await browserInstance.newPage()
-    page.setDefaultNavigationTimeout(120000)
+    page.setDefaultNavigationTimeout(0)
     await page.emulate(device)
     return page
   } catch (error) {
@@ -106,7 +110,6 @@ async function createPage(
 }
 
 async function scrapeGoogle(searchQuery: string, browserInstance: Browser): Promise<string[]> {
-  console.log('scrapeGoogle')
   try {
     const page = await createPage(browserInstance, devices['iPhone X'])
 
@@ -115,8 +118,8 @@ async function scrapeGoogle(searchQuery: string, browserInstance: Browser): Prom
     const searchResults = await page.$$eval('.v5yQqb > a', (links) =>
       links.map((link) => link.href),
     )
-
-    return searchResults.slice(0, 2)
+    console.log('scrapeGoogle finished')
+    return searchResults.slice(0, 10)
   } catch (error) {
     console.error('Error scraping Google:', (error as Error).message)
     throw error
