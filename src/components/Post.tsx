@@ -75,7 +75,7 @@ const Post = () => {
       </form>
       <Separator className='my-8' />
       {/* Display the images */}
-      <div className='grid gap-[30px] grid-cols-[repeat(auto-fit,200px)] grid-flow-row-dense'>
+      <div className='grid gap-[30px] grid-cols-[repeat(auto-fit,200px)] grid-flow-row-dense  justify-center'>
         {data?.files.map((file, index) => (
           <div
             key={index}
